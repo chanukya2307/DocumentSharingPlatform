@@ -3,6 +3,8 @@ import { Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
+const BASE_URL = "https://documentsharingplatform.onrender.com";
+
 const ViewFilesPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [files, setFiles] = useState<any[]>([]);
@@ -19,7 +21,7 @@ const ViewFilesPage: React.FC = () => {
     setError(null);
 
     try {
-      const response = await axios.get(`http://localhost:5000/files/${username}`);
+      const response = await axios.get(`${BASE_URL}/files/${username}`);
       setFiles(response.data.files || []);
     } catch (err) {
       console.error("Error fetching files:", err);
@@ -34,9 +36,9 @@ const ViewFilesPage: React.FC = () => {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`http://localhost:5000/files/${filename}`);
+      await axios.delete(`${BASE_URL}/files/${filename}`);
       toast.success("File deleted successfully");
-      setFiles(prev => prev.filter(file => file.filename !== filename));
+      setFiles((prev) => prev.filter((file) => file.filename !== filename));
     } catch (err) {
       console.error("Delete error:", err);
       toast.error("Failed to delete file");
@@ -74,11 +76,18 @@ const ViewFilesPage: React.FC = () => {
               className="border p-4 rounded shadow-md flex justify-between items-center"
             >
               <div>
-                <p><strong>Filename:</strong> {file.filename}</p>
-                <p><strong>Size:</strong> {file.size} bytes</p>
-                <p><strong>Uploaded:</strong> {new Date(file.uploaded_at).toLocaleString()}</p>
+                <p>
+                  <strong>Filename:</strong> {file.filename}
+                </p>
+                <p>
+                  <strong>Size:</strong> {file.size} bytes
+                </p>
+                <p>
+                  <strong>Uploaded:</strong>{" "}
+                  {new Date(file.uploaded_at).toLocaleString()}
+                </p>
                 <a
-                  href={`http://localhost:5000/uploads/${file.filename}`}
+                  href={`${BASE_URL}/uploads/${file.filename}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 underline"
