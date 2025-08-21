@@ -4,6 +4,9 @@ import toast from 'react-hot-toast';
 
 const allowedExtensions = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.txt'];
 
+
+const BASE_URL = "https://documentsharingplatform.onrender.com";
+
 function UploadPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [username, setUsername] = useState('');
@@ -81,7 +84,7 @@ function UploadPage() {
         formData.append('username', username);
         formData.append('file', file);
 
-        const res = await fetch('http://localhost:5000/upload', {
+        const res = await fetch(`${BASE_URL}/upload`, {
           method: 'POST',
           body: formData,
         });
@@ -91,7 +94,8 @@ function UploadPage() {
         if (!res.ok) throw new Error(data.message || `Upload failed for ${file.name}`);
 
         toast.success(`${file.name} uploaded`);
-        //links.push(`http://localhost:5000${data.fileUrl}`);
+        // If backend sends fileUrl, use BASE_URL here too
+        // links.push(`${BASE_URL}${data.fileUrl}`);
       }
 
       setUploadedLinks(links);
